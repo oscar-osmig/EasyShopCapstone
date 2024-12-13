@@ -28,7 +28,6 @@ public class ProfileController {
 
     @GetMapping()
     @PreAuthorize("permitAll()")
-
     public Profile getById(Principal principal)
     {
         User user = userDao.getByUserName(principal.getName());
