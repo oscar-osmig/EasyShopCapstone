@@ -95,6 +95,7 @@ public class CategoriesController
     public Category addCategory(@RequestBody Category category)
     {
         // insert the category
+
         try
         {
             return categoryDao.create(category);

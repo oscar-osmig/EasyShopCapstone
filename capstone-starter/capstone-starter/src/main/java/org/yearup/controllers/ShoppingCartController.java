@@ -2,14 +2,12 @@ package org.yearup.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProductDao;
 import org.yearup.data.ShoppingCartDao;
 import org.yearup.data.UserDao;
+import org.yearup.models.Product;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.User;
 
@@ -58,6 +56,22 @@ public class ShoppingCartController
 
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
+    @PostMapping("products/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public ShoppingCart addCart(Principal principal, @PathVariable int id)
+    {
+         User user = userDao.getByUserName(principal.getName());
+
+        try
+        {
+            return shoppingCartDao.create(user.getId(), id);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
+    }
 
 
     // add a PUT method to update an existing product in the cart - the url should be
@@ -67,5 +81,21 @@ public class ShoppingCartController
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
+    @DeleteMapping()
+    public ShoppingCart deleteCart(Principal principal)
+    {
+        User user = userDao.getByUserName(principal.getName());
+
+        try
+        {
+            shoppingCartDao.delete(user.getId());
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
+        return new ShoppingCart();
+    }
 
 }
