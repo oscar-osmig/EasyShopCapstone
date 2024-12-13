@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProfileDao;
 import org.yearup.data.UserDao;
+import org.yearup.models.Category;
 import org.yearup.models.Product;
 import org.yearup.models.Profile;
 import org.yearup.models.User;
@@ -26,7 +27,8 @@ public class ProfileController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("permitAll()")
+
     public Profile getById(Principal principal)
     {
         User user = userDao.getByUserName(principal.getName());
@@ -38,7 +40,7 @@ public class ProfileController {
         * */
 
 
-        // get the category by id
+        // get the profile by id
         try
         {
             var profile = profileDao.getByUserId(user.getId());
@@ -57,7 +59,7 @@ public class ProfileController {
 
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Profile addProduct(@RequestBody Profile profile)
+    public Profile addProfile(@RequestBody Profile profile)
     {
         try
         {
@@ -68,6 +70,31 @@ public class ProfileController {
             ex.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
+    }
+
+    @PutMapping()
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @CrossOrigin
+    public void updateProfile(Principal principal, @RequestBody Profile profile)
+    {
+        // update the profile by id
+        User user = userDao.getByUserName(principal.getName());
+
+        try
+        {
+            var profile2 = profileDao.getByUserId(user.getId());
+
+            if(profile2 == null)
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+            profileDao.update(profile2.getUserId(), profile);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
+
     }
 
 }
