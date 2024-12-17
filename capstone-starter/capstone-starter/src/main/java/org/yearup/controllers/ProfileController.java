@@ -31,11 +31,13 @@ public class ProfileController {
     public Profile getById(Principal principal)
     {
         User user = userDao.getByUserName(principal.getName());
+        System.out.println(user);
         /*
         *   Maaike helped me do this, the id was not being passed through the url
         *   Principal is a bean available, and with it, I can get the name of the current logged-in user
         *   so, I get user by the name
         *   then I can get the id of the user through the instance
+        *
         * */
 
 
@@ -55,7 +57,8 @@ public class ProfileController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
     }
-
+    // C R U D
+    // post get put delete
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_USER')")
     public Profile addProfile(@RequestBody Profile profile)

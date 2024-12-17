@@ -11,6 +11,8 @@ public interface ShoppingCartDao
     void delete(int userId);
 
     ShoppingCart create(int userId, int productId);
+
+    ShoppingCart update(int userId, int productId, int quantity);
     // add additional method signatures here
 
 
