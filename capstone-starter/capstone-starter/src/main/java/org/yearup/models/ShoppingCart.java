@@ -18,8 +18,26 @@ public class ShoppingCart
         this.items = items;
     }
 
+    // my code
+    private int product_id;
+
+    public int getProduct_id() {
+        return product_id;
+    }
+
+
+   // write code to get quantity of the items
+   public int getQuantityForProduct(int productId) {
+       ShoppingCartItem item = items.get(productId);
+       if (item != null) {
+           return item.getQuantity();  //
+       }
+       return 0;  // Return 0 if the item is not in the cart
+   }
+
     public boolean contains(int productId)
     {
+        product_id = productId;
         return items.containsKey(productId);
     }
 

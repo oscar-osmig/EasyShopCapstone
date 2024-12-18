@@ -30,8 +30,12 @@ public class ProfileController {
     @PreAuthorize("permitAll()")
     public Profile getById(Principal principal)
     {
+        System.out.println("principal: (username) " + principal.getName());
+
         User user = userDao.getByUserName(principal.getName());
-        System.out.println(user);
+
+        System.out.println("user id: " + user.getId());
+        System.out.println("user with id: " + user.getId() + " user: " + user);
         /*
         *   Maaike helped me do this, the id was not being passed through the url
         *   Principal is a bean available, and with it, I can get the name of the current logged-in user
