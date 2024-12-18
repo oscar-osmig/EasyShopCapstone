@@ -1,6 +1,7 @@
 package org.yearup.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,7 +38,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public void checkout(Principal principal){
+    public ResponseEntity<Order> checkout(Principal principal){
         User user = userDao.getByUserName(principal.getName());
         try
         {
@@ -45,9 +46,9 @@ public class OrderController {
             var shoppingCart = shoppingCartDao.getByUserId(user.getId());
 
 
+
             int orderId = orderDao.checkout(user.getId(), LocalDateTime.now(), profile.getAddress(), profile.getCity(),
                     profile.getState(), profile.getZip(), shoppingCart.getTotal());
-
             // TODO: make orderline
             /*
             *  need:
@@ -77,6 +78,7 @@ public class OrderController {
             ex.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
+        return ResponseEntity.ok().build();
     }
 
 }
