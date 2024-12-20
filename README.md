@@ -123,7 +123,6 @@ http://localhost:8080/products?minPrice=25&maxPrice=100V
 ```
 
 ### Phase 3
-This option starts asking for the ingredients to customize sandwich.
 
 ```commandline
 New feature
@@ -136,7 +135,7 @@ PUT http://localhost:8080/cart/products/15 has body
 DELETE http://localhost:8080/cart
 ```
 ### Phase 4
-This option as what time of drink customer wants to add.
+
 ``` commandline
  When a iser registers for an account, a user record is also created.
  A user should be able to view and update their pofile.
